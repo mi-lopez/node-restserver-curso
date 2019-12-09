@@ -2,35 +2,24 @@ require('./config/config');
 
 const express = require('express');
 const app = express();
-const bodyParser = require('body-parser')
+const bodyParser = require('body-parser');
+const mongoose = require('mongoose');
 
-// parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({
     extended: false
-}))
+}));
+app.use(bodyParser.json());
 
-// parse application/json
-app.use(bodyParser.json())
+app.use(require('./controllers/usuario'));
 
-app.get('/usuario', function(req, res) {
-    res.json({
-        'nombre': 'Miguel López',
-        'edad': 33
-    });
-})
-
-app.post('/usuario', function(req, res) {
-
-    if (req.body.nombre === undefined) {
-        res.status(401).json({
-            'ok': false,
-            'mensaje': 'Falta nombre de usuario'
-        });
-    }
-    res.json({
-        'usuario': req.body
-    });
-})
+mongoose.connect(process.env.URL_DB, {
+    useNewUrlParser: true,
+    useCreateIndex: true,
+    useUnifiedTopology: true
+}, (err, res) => {
+    if (err) throw err;
+    console.log('Base de datos ONLINE');
+});
 
 app.listen(process.env.PORT, () => {
     console.log(`Escuchando puerto ${process.env.PORT}`);
