@@ -10,7 +10,7 @@ app.use(bodyParser.urlencoded({
 }));
 app.use(bodyParser.json());
 
-app.use(require('./controllers/usuario'));
+app.use(require('./controllers/index'));
 
 mongoose.connect(process.env.URL_DB, {
     useNewUrlParser: true,
